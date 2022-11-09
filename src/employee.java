@@ -91,38 +91,61 @@ public class Employee {
                         System.out.println(e);
                     }
                     break;
-                case 4:
-                    System.out.println("Update a Employee");
+                case 3:
+                    System.out.println("Search for an Employee");
                     System.out.println("Enter the Employee code: ");
                     empcode = input.nextInt();
-                    System.out.println("Enter Employee name to update: ");
-                    empname = input.next();
-                    System.out.println("Enter the designation to update: ");
-                    empdes = input.next();
-                    System.out.println("Enter the salary to update: ");
-                    empsalary = input.nextInt();
-                    System.out.println("Enter the Company name to update: ");
-                    compname = input.next();
-                    System.out.println("Enter the Phone Number to update: ");
-                    empphone = input.next();
-                    System.out.println("Enter the Email Id to update: ");
-                    empemail = input.next();
-                    System.out.println("Enter the password to update: ");
-                    emppassword = input.next();
-
-                    try {
+                    try{
                         Class.forName("com.mysql.jdbc.Driver");
                         Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/employeedb", "root", "");
-                        String sql = "UPDATE `employee` SET `emp_name`='"+empname+"',`designation`='"+empdes+"',`salary`='"+empsalary+"',`companyname`='"+compname+"',`phone`='"+empphone+"',`emailid`='"+empemail+"',`password`='"+emppassword+"' WHERE `emp_code` = "+String.valueOf(empcode);
+                        String sql = "SELECT `emp_name`, `designation`, `salary`, `companyname`, `phone`, `emailid`, `password` FROM `employee` WHERE `emp_code`="+String.valueOf(empcode);
 
                         Statement stmt = con.createStatement();
-                        stmt.executeUpdate(sql);
-                        System.out.println("Data updated successfully");
+                        ResultSet rs = stmt.executeQuery(sql);
+                        while(rs.next()){
+                            String fetchEmpName = rs.getString("empname");
+                            String fetchEmpDes = rs.getString("designation");
+                            String fetchEmpSalary = rs.getString("salary");
+                            String fetchCompName = rs.getString("companyname");
+                            String fetchPhone = rs.getString("phone");
+                            String fetchEmail = rs.getString("emailid");
+
+                            System.out.println("Employee Name: "+fetchEmpName);
+                            System.out.println("Employee Designation: "+fetchEmpDes);
+                            System.out.println("Employee Salary: "+fetchEmpSalary);
+                            System.out.println("Employee CompanyName: "+fetchCompName);
+                            System.out.println("Employee Phone Number: "+fetchPhone);
+                            System.out.println("Employee Email Id: "+fetchEmail);
+
+                        }
+
                     }
                     catch (Exception e){
                         System.out.println(e);
                     }
                     break;
+                case 5:
+                    System.out.println("Delete an Employee");
+                    System.out.println("Enter the employee code: ");
+                    empcode = input.nextInt();
+                    try{
+                        Class.forName("com.mysql.jdbc.Driver");
+                        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/employeedb","root","");
+                        String sql ="DELETE FROM `employee` WHERE `emp_code`="+String.valueOf(empcode);
+                        Statement stmt = con.createStatement();
+                        stmt.executeUpdate(sql);
+                        System.out.println("Employee Deleted from database successfully.");
+
+                    }
+                    catch (Exception e){
+                        System.out.println(e);
+                    }
+                    break;
+
+
+                case 6:
+                    System.out.println("Exited Menu");
+                    System.exit(0);
             }
         }
     }
